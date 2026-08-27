@@ -48,4 +48,21 @@ TEST_CASE("Test MyClass", "[notify_change]")
     REQUIRE(c.changed() == 2);
 }
 
+TEST_CASE("Test string", "[notify_change]")
+{
+    size_t c{};
+
+    phreak::notify_change<std::string> v{[&c](){ ++c; }, "hello" };
+    REQUIRE(c == 0);
+    REQUIRE(v == "hello");
+
+    v = "world";
+    REQUIRE(v == "world");
+    REQUIRE(c == 1);
+    v = "3.11";
+    REQUIRE(v == "3.11");
+    REQUIRE(c == 2);
+}
+
+
 } // ::

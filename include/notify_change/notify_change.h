@@ -116,4 +116,113 @@ private:
     callable<T> mCallable{};
 };
 
+
+template <class T,class Condition>
+[[nodiscard]] bool operator == (notify_change<T,Condition> const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return *lhs == *rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator == (notify_change<T,Condition> const& lhs,U const& rhs) noexcept
+{
+    return *lhs == rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator == (U const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return lhs == *rhs;
+}
+
+template <class T,class Condition>
+[[nodiscard]] bool operator != (notify_change<T,Condition> const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return *lhs != *rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator != (notify_change<T,Condition> const& lhs,U const& rhs) noexcept
+{
+    return *lhs != rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator != (U const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return lhs != *rhs;
+}
+
+template <class T,class Condition>
+[[nodiscard]] bool operator < (notify_change<T,Condition> const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return *lhs < *rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator < (notify_change<T,Condition> const& lhs,U const& rhs) noexcept
+{
+    return *lhs < rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator < (U const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return lhs < *rhs;
+}
+
+template <class T,class Condition>
+[[nodiscard]] bool operator <= (notify_change<T,Condition> const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return *lhs <= *rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator <= (notify_change<T,Condition> const& lhs,U const& rhs) noexcept
+{
+    return *lhs <= rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator <= (U const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return lhs <= *rhs;
+}
+
+template <class T,class Condition>
+[[nodiscard]] bool operator > (notify_change<T,Condition> const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return *lhs > *rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator > (notify_change<T,Condition> const& lhs,U const& rhs) noexcept
+{
+    return *lhs > rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator > (U const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return lhs > *rhs;
+}
+
+template <class T,class Condition>
+[[nodiscard]] bool operator >= (notify_change<T,Condition> const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return *lhs >= *rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator >= (notify_change<T,Condition> const& lhs,U const& rhs) noexcept
+{
+    return *lhs >= rhs;
+}
+
+template <class T,class Condition,class U>
+[[nodiscard]] bool operator >= (U const& lhs,notify_change<T,Condition> const& rhs) noexcept
+{
+    return lhs >= *rhs;
+}
+
 } //namespace phreak
