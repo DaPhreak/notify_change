@@ -17,41 +17,42 @@ public:
     using const_reference = value_type const&;
     using rv_ref          = value_type&&;
     using rv_const_ref    = value_type const&&;
+    using condition_type  = Condition;
     using callable_type   = callable<value_type>;
 
     notify_change() = delete;
     notify_change(notify_change const&) = delete;
     notify_change(notify_change&&) = delete;
 
-    template <class F,std::enable_if_t<std::is_constructible_v<callable<T>,F>>* = nullptr>
+    template <class F,std::enable_if_t<std::is_constructible_v<callable_type,F>>* = nullptr>
     explicit notify_change(F&& function)
     : mCallable{std::forward<F>(function)}
     {}
 
-    template <class F,std::enable_if_t<std::is_constructible_v<callable<T>,F>>* = nullptr>
+    template <class F,std::enable_if_t<std::is_constructible_v<callable_type,F>>* = nullptr>
     notify_change(F&& function,const_reference v)
     : mCallable{std::forward<F>(function)}
     , mValue{v}
     {}
 
-    template <class F,std::enable_if_t<std::is_constructible_v<callable<T>,F>>* = nullptr>
+    template <class F,std::enable_if_t<std::is_constructible_v<callable_type,F>>* = nullptr>
     notify_change(F&& function,rv_ref v)
     : mCallable{std::forward<F>(function)}
     , mValue{std::move(v)}
     {}
 
-    template <class O,class F,std::enable_if_t<std::is_constructible_v<callable<T>,O&,F>>* = nullptr>
+    template <class O,class F,std::enable_if_t<std::is_constructible_v<callable_type,O&,F>>* = nullptr>
     notify_change(O& owner,F function)
     : mCallable{owner,std::move(function)}
     {}
 
-    template <class O,class F,std::enable_if_t<std::is_constructible_v<callable<T>,O&,F>>* = nullptr>
+    template <class O,class F,std::enable_if_t<std::is_constructible_v<callable_type,O&,F>>* = nullptr>
     notify_change(O& owner,F function,const_reference v)
     : mCallable{ owner, std::move( function ) }
     , mValue{ v }
     {}
 
-    template <class O,class F,std::enable_if_t<std::is_constructible_v<callable<T>,O&,F>>* = nullptr>
+    template <class O,class F,std::enable_if_t<std::is_constructible_v<callable_type,O&,F>>* = nullptr>
     notify_change(O&owner,F function,rv_ref v)
     : mCallable{owner,std::move(function) }
     , mValue{std::move(v)}
@@ -72,7 +73,7 @@ public:
 
     notify_change& operator = (const_reference v)
     {
-        if (Condition{}(mValue,v)) {
+        if (condition_type{}(mValue,v)) {
             mValue = v;
             notify();
         }
@@ -81,7 +82,7 @@ public:
 
     notify_change& operator = (rv_ref v)
     {
-        if (Condition{}(mValue,v)) {
+        if (condition_type{}(mValue,v)) {
             mValue = std::move(v);
             notify();
         }
@@ -112,8 +113,8 @@ private:
         }
     }
 
-    T mValue{};
-    callable<T> mCallable{};
+    value_type mValue{};
+    callable_type mCallable{};
 };
 
 
