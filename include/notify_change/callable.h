@@ -58,7 +58,6 @@ public:
         return *this;
     }
 
-
     void swap(callable& s) noexcept
     {
         std::swap(mFunction,s.mFunction);
