@@ -21,6 +21,28 @@ private:
     phreak::notify_change<double> mValue{*this,&MyClass::onChanged};
 };
 
+
+TEST_CASE("Test callable", "[notify_change]")
+{
+    phreak::callable<int> c;
+
+    REQUIRE_THROWS(c(1));
+
+    c = []{};
+    REQUIRE_NOTHROW(c(1));
+
+    phreak::callable<int> c2{c};
+    REQUIRE_NOTHROW(c(1));
+    REQUIRE_NOTHROW(c2(1));
+    c2=c;
+    REQUIRE_NOTHROW(c(1));
+    REQUIRE_NOTHROW(c2(1));
+    c2=std::move(c);
+    //REQUIRE(!c);
+    //REQUIRE_THROWS(c(1));
+    REQUIRE_NOTHROW(c2(1));
+}
+
 TEST_CASE("Test notify_change", "[notify_change]")
 {
     size_t c{};

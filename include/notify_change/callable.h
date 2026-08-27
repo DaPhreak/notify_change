@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <utility>
 #include <type_traits>
 
@@ -19,12 +20,12 @@ public:
     : mFunction{std::exchange(s.mFunction,nullptr)}
     {}
 
-    template <class F,std::enable_if_t<std::is_invocable_v<F> || std::is_invocable_v<F,T>>* = nullptr>
+    template <class F,std::enable_if_t<!std::is_base_of_v<callable,std::decay_t<F>> && (std::is_invocable_v<F> || std::is_invocable_v<F,T>)>* = nullptr>
     explicit callable(F&& function)
     : mFunction{new SimpleFunction{std::forward<F>(function)}}
     {}
 
-    template <class O,class F,std::enable_if_t<std::is_class_v<O> && std::is_member_function_pointer_v<F> && ( std::is_invocable_v<F,O&> || std::is_invocable_v<F,O&,T> )>* = nullptr>
+    template <class O,class F,std::enable_if_t<std::is_class_v<O> && std::is_member_function_pointer_v<F> && (std::is_invocable_v<F,O&> || std::is_invocable_v<F,O&,T>)>* = nullptr>
     callable(O& object,F function)
     : mFunction{new MemberFunction{object,std::move(function)}}
     {}
@@ -38,7 +39,7 @@ public:
 
     callable& operator = (callable const& s)
     {
-        if ( &s != this ) {
+        if (&s != this) {
             callable{s}.swap(*this);
         }
         return *this;
@@ -46,11 +47,17 @@ public:
 
     callable& operator = (callable&& s) noexcept
     {
-        if ( &s != this ) {
-            callable{std::move(s)}.swap(*this);
-        }
+        callable{std::move(s)}.swap(*this);
         return *this;
     }
+
+    template <class F,std::enable_if_t<!std::is_base_of_v<callable,std::decay_t<F>> && (std::is_invocable_v<F> || std::is_invocable_v<F,T>)>* = nullptr>
+    callable& operator = (F&& function) noexcept
+    {
+        callable{std::forward<F>(function)}.swap(*this);
+        return *this;
+    }
+
 
     void swap(callable& s) noexcept
     {
@@ -62,6 +69,9 @@ public:
     
     void operator ()(T const& v) const
     {
+        if (!mFunction) {
+            throw std::bad_function_call{};
+        }
         (*mFunction)(v);
     }
 
