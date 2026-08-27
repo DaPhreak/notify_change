@@ -94,16 +94,16 @@ public:
     [[nodiscard]] constexpr const_pointer   operator -> () const   noexcept { return &mValue; }
 
     [[nodiscard]] constexpr const_reference operator *  () const&  noexcept { return mValue; }
-    [[nodiscard]] constexpr rv_const_ref    operator *  () const&& noexcept { return std::move(**this); }
-    [[nodiscard]] constexpr rv_ref          operator *  () &&      noexcept { return std::move(**this); }
+    [[nodiscard]] constexpr rv_const_ref    operator *  () const&& noexcept { return std::move(mValue); }
+    [[nodiscard]] constexpr rv_ref          operator *  () &&      noexcept { return std::move(mValue); }
 
-    [[nodiscard]] constexpr const_reference value       () const&  noexcept { return **this; }
-    [[nodiscard]] constexpr rv_const_ref    value       () const&& noexcept { return std::move(**this); }
-    [[nodiscard]] constexpr rv_ref          value       () &&      noexcept { return std::move(**this); }
+    [[nodiscard]] constexpr const_reference value       () const&  noexcept { return mValue; }
+    [[nodiscard]] constexpr rv_const_ref    value       () const&& noexcept { return std::move(mValue); }
+    [[nodiscard]] constexpr rv_ref          value       () &&      noexcept { return std::move(mValue); }
 
-    [[nodiscard]] constexpr operator const_reference    () const&  noexcept { return **this; }
-    [[nodiscard]] constexpr operator rv_const_ref       () const&& noexcept { return std::move(**this); }
-    [[nodiscard]] constexpr operator rv_ref             () &&      noexcept { return std::move(**this); }
+    [[nodiscard]] constexpr operator const_reference    () const&  noexcept { return mValue; }
+    [[nodiscard]] constexpr operator rv_const_ref       () const&& noexcept { return std::move(mValue); }
+    [[nodiscard]] constexpr operator rv_ref             () &&      noexcept { return std::move(mValue); }
 
 private:
     void notify() const
