@@ -226,4 +226,16 @@ template <class T,class Condition,class U>
     return lhs >= *rhs;
 }
 
+
+struct compare_always_true {
+    template <class A,class B>
+    [[nodiscard]] constexpr bool operator()(A const&,B const&) const noexcept
+    {
+        return true;
+    }
+};
+
+template <class T>
+using notify_always = notify_change<T,compare_always_true>;
+
 } //namespace phreak

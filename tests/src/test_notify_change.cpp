@@ -52,9 +52,29 @@ TEST_CASE("Test notify_change", "[notify_change]")
     v = 3.1;
     REQUIRE(v == 3.1);
     REQUIRE(c == 1);
+    v = 3.1;
+    REQUIRE(v == 3.1);
+    REQUIRE(c == 1);
     v = 3.11;
     REQUIRE(v == 3.11);
     REQUIRE(c == 2);
+}
+
+TEST_CASE("Test notify_always", "[notify_change]")
+{
+    size_t c{};
+
+    phreak::notify_always<double> v{[&c](){ ++c; }, 1.2 };
+    REQUIRE(c == 0);
+    v = 3.1;
+    REQUIRE(v == 3.1);
+    REQUIRE(c == 1);
+    v = 3.1;
+    REQUIRE(v == 3.1);
+    REQUIRE(c == 2);
+    v = 3.11;
+    REQUIRE(v == 3.11);
+    REQUIRE(c == 3);
 }
 
 TEST_CASE("Test MyClass", "[notify_change]")
