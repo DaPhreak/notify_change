@@ -73,22 +73,18 @@ public:
 
     notify_change& operator = (const_reference v)
     {
-        const bool notify{mCallable && condition_type{}(mValue,v)};
-
-        mValue = v;
-        if (notify) {
-            mCallable(mValue);
+        if (condition_type{}(mValue,v)) {
+            mValue = v;
+            notify();
         }
         return *this;
     }
 
     notify_change& operator = (rv_ref v)
     {
-        const bool notify{mCallable && condition_type{}(mValue,v)};
-
-        mValue = std::move(v);
-        if (notify) {
-            mCallable(mValue);
+        if (condition_type{}(mValue,v)) {
+            mValue = std::move(v);
+            notify();
         }
         return *this;
     }
@@ -110,6 +106,13 @@ public:
     [[nodiscard]] constexpr operator rv_ref             () &&      noexcept { return std::move(mValue); }
 
 private:
+    void notify() const
+    {
+        if (mCallable) {
+            mCallable(mValue);
+        }
+    }
+
     value_type mValue{};
     callable_type mCallable{};
 };
